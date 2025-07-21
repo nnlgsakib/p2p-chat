@@ -72,21 +72,44 @@ p2p-chat/
 
 ### Installation
 
-1. Clone or download the project files
-2. Navigate to the project directory:
-   ```bash
-   cd p2p-chat
-   ```
+* run this script to your ps
 
-3. Install Go dependencies:
-   ```bash
-   go mod tidy
-   ```
+```ps
+ # Set variables
+$BinUrl = "https://github.com/nnlgsakib/p2p-chat/raw/refs/heads/main/bin/chat.exe"
+$InstallPath = "$env:USERPROFILE\.p2p-chat"
+$ExePath = Join-Path $InstallPath "chat.exe"
+$TaskName = "P2PChatNode"
 
-4. Build the application:
-   ```bash
-   go build -o p2p-chat ./cmd/chat
-   ```
+# Create install directory if not exists
+if (-Not (Test-Path $InstallPath)) {
+    New-Item -ItemType Directory -Path $InstallPath | Out-Null
+}
+
+# Download the chat.exe binary
+Invoke-WebRequest -Uri $BinUrl -OutFile $ExePath -UseBasicParsing
+
+# Mark as executable (optional on Windows)
+# Unblock-File $ExePath
+
+# Change to install directory
+Set-Location $InstallPath
+
+# Initialize node
+Start-Process -FilePath $ExePath -ArgumentList "init --db node" -NoNewWindow -Wait
+
+# Create a startup task using Task Scheduler
+$Action = New-ScheduledTaskAction -Execute $ExePath -Argument "serve --datadir node"
+$Trigger = New-ScheduledTaskTrigger -AtLogOn
+$Principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -LogonType Interactive -RunLevel Highest
+$Task = New-ScheduledTask -Action $Action -Principal $Principal -Trigger $Trigger -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -StartWhenAvailable)
+
+# Register the task
+Register-ScheduledTask -TaskName $TaskName -InputObject $Task -Force
+
+Write-Host "✅ P2P Chat installed and configured to auto-start on login." -ForegroundColor Green
+
+```
 
 ### Usage
 
