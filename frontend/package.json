@@ -1,0 +1,18 @@
+{
+  "name": "p2p-chat-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite dev",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.6",
+    "@sveltejs/kit": "^2.14.0",
+    "svelte": "^5.18.2",
+    "vite": "^6.0.7"
+  },
+  "type": "module"
+}
+
