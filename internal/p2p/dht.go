@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/libp2p/go-libp2p-kad-dht"
+	dht "github.com/libp2p/go-libp2p-kad-dht"
 	record "github.com/libp2p/go-libp2p-record"
 	"github.com/libp2p/go-libp2p/core/host"
 	"github.com/libp2p/go-libp2p/core/peer"
@@ -54,6 +54,7 @@ func SetupDHT(ctx context.Context, h host.Host, bootstrapPeer string) (*dht.Ipfs
 	// Custom bootstrap peers
 	customBootstrapPeers := []string{
 		// "/ip4/127.0.0.1/tcp/4001/p2p/12D3KooWDjdtJTB8hdvJgsh9MRvXdHQ6ThKnjF2pzhw8tXWVXhL4",
+		"/ip4/148.251.35.204/tcp/30001/p2p/12D3KooWH4uEYewx2gwwzxQNeGkkTVm1V2dyfvUytcDzr6eh7HSd",
 	}
 
 	// Convert string addresses to multiaddr
